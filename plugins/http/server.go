@@ -34,7 +34,7 @@ const (
 const componentIDGOHttpServer = 5004
 
 type handler struct {
-	tracer    *go2sky.Tracer
+	tracer    *go4sky.Tracer
 	name      string
 	next      http.Handler
 	extraTags map[string]string
@@ -61,7 +61,7 @@ func WithServerOperationName(name string) ServerOption {
 }
 
 // NewServerMiddleware returns a http.Handler middleware with tracing.
-func NewServerMiddleware(tracer *go2sky.Tracer, options ...ServerOption) (func(http.Handler) http.Handler, error) {
+func NewServerMiddleware(tracer *go4sky.Tracer, options ...ServerOption) (func(http.Handler) http.Handler, error) {
 	if tracer == nil {
 		return nil, errInvalidTracer
 	}
@@ -90,10 +90,10 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	span.SetComponent(componentIDGOHttpServer)
 	for k, v := range h.extraTags {
-		span.Tag(go2sky.Tag(k), v)
+		span.Tag(go4sky.Tag(k), v)
 	}
-	span.Tag(go2sky.TagHTTPMethod, r.Method)
-	span.Tag(go2sky.TagURL, fmt.Sprintf("%s%s", r.Host, r.URL.Path))
+	span.Tag(go4sky.TagHTTPMethod, r.Method)
+	span.Tag(go4sky.TagURL, fmt.Sprintf("%s%s", r.Host, r.URL.Path))
 	span.SetSpanLayer(agentv3.SpanLayer_Http)
 
 	rww := &responseWriterWrapper{w: w, statusCode: 200}
@@ -102,7 +102,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if code >= 400 {
 			span.Error(time.Now(), "Error on handling request")
 		}
-		span.Tag(go2sky.TagStatusCode, strconv.Itoa(code))
+		span.Tag(go4sky.TagStatusCode, strconv.Itoa(code))
 		span.End()
 	}()
 	if h.next != nil {

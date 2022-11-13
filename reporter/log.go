@@ -24,19 +24,19 @@ import (
 	"github.com/chwjbn/go4sky"
 )
 
-func NewLogReporter() (go2sky.Reporter, error) {
-	return &logReporter{logger: log.New(os.Stderr, "go2sky-log", log.LstdFlags)}, nil
+func NewLogReporter() (go4sky.Reporter, error) {
+	return &logReporter{logger: log.New(os.Stderr, "go4sky-log", log.LstdFlags)}, nil
 }
 
 type logReporter struct {
 	logger *log.Logger
 }
 
-func (lr *logReporter) Boot(service string, serviceInstance string, cdsWatchers []go2sky.AgentConfigChangeWatcher) {
+func (lr *logReporter) Boot(service string, serviceInstance string, cdsWatchers []go4sky.AgentConfigChangeWatcher) {
 
 }
 
-func (lr *logReporter) Send(spans []go2sky.ReportedSpan) {
+func (lr *logReporter) Send(spans []go4sky.ReportedSpan) {
 	if spans == nil {
 		return
 	}

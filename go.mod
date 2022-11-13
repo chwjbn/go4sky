@@ -3,7 +3,6 @@ module github.com/chwjbn/go4sky
 go 1.17
 
 require (
-	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/shirou/gopsutil/v3 v3.22.10
@@ -13,6 +12,7 @@ require (
 
 require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect

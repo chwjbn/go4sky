@@ -31,7 +31,7 @@ import (
 
 const (
 	defaultInterval            = 15 * time.Second
-	defaultLogPrefix           = "go2sky-golang-metric"
+	defaultLogPrefix           = "go4sky-golang-metric"
 	InstanceGolangHeap         = "instance_golang_heap_alloc"
 	InstanceGolangStack        = "instance_golang_stack_used"
 	InstanceGolangGCTime       = "instance_golang_gc_pause_time"

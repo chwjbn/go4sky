@@ -30,7 +30,7 @@ const componentIDGOHttpClient = 5005
 type ClientConfig struct {
 	name      string
 	client    *http.Client
-	tracer    *go2sky.Tracer
+	tracer    *go4sky.Tracer
 	extraTags map[string]string
 }
 
@@ -62,7 +62,7 @@ func WithClient(client *http.Client) ClientOption {
 }
 
 // NewClient returns an HTTP Client with tracer
-func NewClient(tracer *go2sky.Tracer, options ...ClientOption) (*http.Client, error) {
+func NewClient(tracer *go4sky.Tracer, options ...ClientOption) (*http.Client, error) {
 	if tracer == nil {
 		return nil, errInvalidTracer
 	}
@@ -100,17 +100,17 @@ func (t *transport) RoundTrip(req *http.Request) (res *http.Response, err error)
 	defer span.End()
 	span.SetComponent(componentIDGOHttpClient)
 	for k, v := range t.extraTags {
-		span.Tag(go2sky.Tag(k), v)
+		span.Tag(go4sky.Tag(k), v)
 	}
-	span.Tag(go2sky.TagHTTPMethod, req.Method)
-	span.Tag(go2sky.TagURL, req.URL.String())
+	span.Tag(go4sky.TagHTTPMethod, req.Method)
+	span.Tag(go4sky.TagURL, req.URL.String())
 	span.SetSpanLayer(agentv3.SpanLayer_Http)
 	res, err = t.delegated.RoundTrip(req)
 	if err != nil {
 		span.Error(time.Now(), err.Error())
 		return
 	}
-	span.Tag(go2sky.TagStatusCode, strconv.Itoa(res.StatusCode))
+	span.Tag(go4sky.TagStatusCode, strconv.Itoa(res.StatusCode))
 	if res.StatusCode >= http.StatusBadRequest {
 		span.Error(time.Now(), "Errors on handling client")
 	}

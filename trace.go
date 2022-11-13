@@ -30,7 +30,7 @@ const (
 	errParameter = tool.Error("parameter are nil")
 )
 
-// Tracer is go2sky tracer implementation.
+// Tracer is go4sky tracer implementation.
 type Tracer struct {
 	service  string
 	instance string
@@ -46,7 +46,7 @@ type Tracer struct {
 // of a Tracer to be created by NewTracer
 type TracerOption func(t *Tracer)
 
-// NewTracer return a new go2sky Tracer
+// NewTracer return a new go4sky Tracer
 func NewTracer(service string, opts ...TracerOption) (tracer *Tracer, err error) {
 	// read the service in the environment variable
 	service = serviceFormEnv(service)

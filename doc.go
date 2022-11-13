@@ -15,7 +15,7 @@
 //
 
 /*
-Package go2sky implements a native Apache SkyWalking agent library for Go.
+Package go4sky implements a native Apache SkyWalking agent library for Go.
 
 See http://skywalking.apache.org/ for more information about Apache SkyWalking.
 */

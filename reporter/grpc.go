@@ -42,7 +42,7 @@ const (
 	maxSendQueueSize     int32 = 30000
 	defaultCheckInterval       = 20 * time.Second
 	defaultCDSInterval         = 20 * time.Second
-	defaultLogPrefix           = "go2sky-gRPC"
+	defaultLogPrefix           = "go4sky-gRPC"
 	authKey                    = "Authentication"
 )
 
@@ -60,7 +60,7 @@ func applyGRPCReporterOption(r *gRPCReporter, opts ...GRPCReporterOption) error 
 }
 
 // NewGRPCReporter create a new reporter to send data to gRPC oap server. Only one backend address is allowed.
-func NewGRPCReporter(serverAddr string, opts ...GRPCReporterOption) (go2sky.Reporter, error) {
+func NewGRPCReporter(serverAddr string, opts ...GRPCReporterOption) (go4sky.Reporter, error) {
 	r := &gRPCReporter{
 		logger:        logger.NewDefaultLogger(log.New(os.Stderr, defaultLogPrefix, log.LstdFlags)),
 		sendCh:        make(chan *agentv3.SegmentObject, maxSendQueueSize),
@@ -102,7 +102,7 @@ func NewGRPCReporter(serverAddr string, opts ...GRPCReporterOption) (go2sky.Repo
 	r.logClient=logv3.NewLogReportServiceClient(r.conn)
 	if r.cdsInterval > 0 {
 		r.cdsClient = configuration.NewConfigurationDiscoveryServiceClient(r.conn)
-		r.cdsService = go2sky.NewConfigDiscoveryService()
+		r.cdsService = go4sky.NewConfigDiscoveryService()
 	}
 	return r, nil
 }
@@ -125,7 +125,7 @@ type gRPCReporter struct {
 	checkInterval    time.Duration
 	cdsInterval      time.Duration
 	meterInterval    *time.Duration
-	cdsService       *go2sky.ConfigDiscoveryService
+	cdsService       *go4sky.ConfigDiscoveryService
 	cdsClient        configuration.ConfigurationDiscoveryServiceClient
 
 	// set report strategy
@@ -145,7 +145,7 @@ type gRPCReporter struct {
 	processStatusHookEnable bool
 }
 
-func (r *gRPCReporter) Boot(service string, serviceInstance string, cdsWatchers []go2sky.AgentConfigChangeWatcher) {
+func (r *gRPCReporter) Boot(service string, serviceInstance string, cdsWatchers []go4sky.AgentConfigChangeWatcher) {
 	r.service = service
 	r.serviceInstance = serviceInstance
 	r.initSendPipeline()
@@ -156,7 +156,7 @@ func (r *gRPCReporter) Boot(service string, serviceInstance string, cdsWatchers 
 	r.bootFlag = true
 }
 
-func (r *gRPCReporter) Send(spans []go2sky.ReportedSpan) {
+func (r *gRPCReporter) Send(spans []go4sky.ReportedSpan) {
 	spanSize := len(spans)
 	if spanSize < 1 {
 		return
@@ -286,7 +286,7 @@ func (r *gRPCReporter) initSendPipeline() {
 }
 
 
-func (r *gRPCReporter) initCDS(cdsWatchers []go2sky.AgentConfigChangeWatcher) {
+func (r *gRPCReporter) initCDS(cdsWatchers []go4sky.AgentConfigChangeWatcher) {
 	if r.cdsClient == nil {
 		return
 	}
@@ -327,21 +327,21 @@ func (r *gRPCReporter) initMetricsCollector() {
 		r.logger.Info("user choose to close the meter collection")
 		return
 	}
-	go2sky.InitMetricCollector(r, r.meterInterval, r.ctx)
+	go4sky.InitMetricCollector(r, r.meterInterval, r.ctx)
 	r.initSendMeterPipeline()
 }
 
-func (r *gRPCReporter) SendMetrics(m go2sky.RunTimeMetric) {
+func (r *gRPCReporter) SendMetrics(m go4sky.RunTimeMetric) {
 
 	meterDataList := make([]*agentv3.MeterData, 0)
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceGolangHeap, float64(m.HeapAlloc), m.Time))
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceGolangStack, float64(m.StackInUse), m.Time))
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceGolangGCTime, float64(m.GCPauseTime), m.Time))
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceGolangGCCount, float64(m.GCCount), m.Time))
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceGolangThreadNum, float64(m.ThreadNum), m.Time))
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceGolangGoroutineNum, float64(m.GoroutineNum), m.Time))
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceCPUUsedRate, m.CpuUsedRate, m.Time))
-	meterDataList = append(meterDataList, r.generateMeter(go2sky.InstanceMemUsedRate, m.MemUsedRate, m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceGolangHeap, float64(m.HeapAlloc), m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceGolangStack, float64(m.StackInUse), m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceGolangGCTime, float64(m.GCPauseTime), m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceGolangGCCount, float64(m.GCCount), m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceGolangThreadNum, float64(m.ThreadNum), m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceGolangGoroutineNum, float64(m.GoroutineNum), m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceCPUUsedRate, m.CpuUsedRate, m.Time))
+	meterDataList = append(meterDataList, r.generateMeter(go4sky.InstanceMemUsedRate, m.MemUsedRate, m.Time))
 
 	defer func() {
 		// recover the panic caused by close sendCh
@@ -405,7 +405,7 @@ func (r *gRPCReporter) initSendMeterPipeline() {
 	}()
 }
 
-func (r *gRPCReporter)SendLog(logData go2sky.LogData)  {
+func (r *gRPCReporter)SendLog(logData go4sky.LogData)  {
 
 	if r.logClient==nil{
 		return

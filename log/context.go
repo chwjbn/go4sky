@@ -34,11 +34,11 @@ type SkyWalkingContext struct {
 // FromContext from context for logging
 func FromContext(ctx context.Context) *SkyWalkingContext {
 	return &SkyWalkingContext{
-		ServiceName:         go2sky.ServiceName(ctx),
-		ServiceInstanceName: go2sky.ServiceInstanceName(ctx),
-		TraceID:             go2sky.TraceID(ctx),
-		TraceSegmentID:      go2sky.TraceSegmentID(ctx),
-		SpanID:              go2sky.SpanID(ctx),
+		ServiceName:         go4sky.ServiceName(ctx),
+		ServiceInstanceName: go4sky.ServiceInstanceName(ctx),
+		TraceID:             go4sky.TraceID(ctx),
+		TraceSegmentID:      go4sky.TraceSegmentID(ctx),
+		SpanID:              go4sky.SpanID(ctx),
 	}
 }
 
