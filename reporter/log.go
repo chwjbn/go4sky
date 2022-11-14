@@ -32,6 +32,10 @@ type logReporter struct {
 	logger *log.Logger
 }
 
+func (lr *logReporter) SendLog(logData go4sky.ReportedLogData) {
+	panic("implement me")
+}
+
 func (lr *logReporter) Boot(service string, serviceInstance string, cdsWatchers []go4sky.AgentConfigChangeWatcher) {
 
 }
