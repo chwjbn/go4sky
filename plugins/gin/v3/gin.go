@@ -34,7 +34,7 @@ func Middleware(engine *gin.Engine) gin.HandlerFunc {
 		span.SetComponent(componentIDGINHttpServer)
 		span.Tag(go4sky.TagHTTPMethod, c.Request.Method)
 		span.Tag(go4sky.TagURL, c.Request.Host+c.Request.URL.Path)
-		span.Tag(go4sky.TagHTTPHost,c.Request.Host)
+		span.Tag(go4sky.TagMQTopic,c.Request.Host)
 		span.SetSpanLayer(agentv3.SpanLayer_Http)
 
 		c.Request = c.Request.WithContext(ctx)
@@ -44,7 +44,7 @@ func Middleware(engine *gin.Engine) gin.HandlerFunc {
 		if len(c.Errors) > 0 {
 			span.Error(time.Now(), c.Errors.String())
 		}
-		span.Tag(go4sky.TagStatusCode, strconv.Itoa(c.Writer.Status()))
+		span.Tag(go4sky.TagHTTPStatusCode, strconv.Itoa(c.Writer.Status()))
 		span.End()
 	}
 }

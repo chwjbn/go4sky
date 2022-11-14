@@ -151,9 +151,9 @@ type Tag string
 
 const (
 	TagURL             Tag = "url"
-	TagStatusCode      Tag = "status_code"
+	TagHTTPStatusCode  Tag = "http.status_code"
 	TagHTTPMethod      Tag = "http.method"
-	TagHTTPHost        Tag = "http.host"
+	TagRPCStatusCode  Tag = "rpc.status_code"
 	TagDBType          Tag = "db.type"
 	TagDBInstance      Tag = "db.instance"
 	TagDBStatement     Tag = "db.statement"
