@@ -153,6 +153,7 @@ const (
 	TagURL             Tag = "url"
 	TagStatusCode      Tag = "status_code"
 	TagHTTPMethod      Tag = "http.method"
+	TagHTTPHost        Tag = "http.host"
 	TagDBType          Tag = "db.type"
 	TagDBInstance      Tag = "db.instance"
 	TagDBStatement     Tag = "db.statement"
